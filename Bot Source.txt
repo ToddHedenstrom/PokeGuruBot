@@ -52,6 +52,7 @@ function showLocation(text) {
     var gymname = (data[i][0]).toString().toLowerCase();
     var gymalias = data[i][1].toString().toLowerCase();
     var expossible = data[i][4].toString();
+    var location = data[i][3].replace(/\s+/g, '');
     var comment = data[i][5].toString();
     var query = text.toLowerCase();
     if ((gymname.indexOf(query) >= 0) || (gymalias.indexOf(query) >= 0)) {
@@ -62,22 +63,235 @@ function showLocation(text) {
         if (gymalias.length > 0) {
           texttosend = texttosend + "Also Known as: " + data[i][1] + "\\n";
         }
+        if (comment.length > 0) {
+          texttosend = texttosend + "Comment: " + comment + "\\n";
+        }
         if (expossible.length > 0) {
           texttosend = texttosend + "EX Raid Gym!\\n";
         }
-        if (comment.length > 0) {
-          texttosend = texttosend + "Comments: " + comment + "\\n";
-        }
         texttosend = texttosend + "Address: " + data[i][2] + "\\n";
-        texttosend = texttosend + "http://maps.google.com/maps?q=" + data[i][3];
+        texttosend = texttosend + "http://maps.google.com/maps?q=" + location;
         sendText(texttosend);
       }
     }
   }
 }
 
+function getTypeData(type, weakness, strength, weather) {
+
+  switch (type) {
+    case "Normal":
+      weakness[1] = weakness[1] + 1;  // fighting
+      
+      strength[7] = strength[7] + 1;  // ghost
+      
+      weather[0] = weather[0] + 1;    // partly cloudy
+      break;
+    case "Fighting":
+      weakness[2] = weakness[2] + 1;    // flying
+      weakness[13] = weakness[13] + 1;  // psychic
+      weakness[17] = weakness[17] + 1;  // fairy
+      
+      strength[5] = strength[5] + 1;    // rock
+      strength[6] = strength[6] + 1;    // bug
+      strength[15] = strength[15] + 1;  // dark
+      
+      weather[1] = weather[1] + 1;      // cloudy
+      break;
+    case "Flying":
+      weakness[5] = weakness[5] + 1;    // rock
+      weakness[12] = weakness[12] + 1;  // electric
+      weakness[14] = weakness[14] + 1;  // ice
+      
+      strength[1] = strength[1] + 1;    // fighting
+      strength[4] = strength[4] + 1;    // ground
+      strength[6] = strength[6] + 1;    // bug
+      strength[11] = strength[11] + 1;  // grass
+      
+      weather[2] = weather[2] + 1;      // windy
+      break;
+    case "Poison":
+      weakness[4] = weakness[4] + 1;    // ground
+      weakness[13] = weakness[13] + 1;  // psychic
+      
+      strength[1] = strength[1] + 1;    // fighting
+      strength[3] = strength[3] + 1;    // poison
+      strength[6] = strength[6] + 1;    // bug
+      strength[11] = strength[11] + 1;  // grass
+      strength[17] = strength[17] + 1;  // fairy
+      
+      weather[1] = weather[1] + 1;      // cloudy
+      break;
+    case "Ground":
+      weakness[10] = weakness[10] + 1;  // water
+      weakness[11] = weakness[11] + 1;  // grass
+      weakness[14] = weakness[14] + 1;  // ice
+      
+      strength[3] = strength[3] + 1;    // poison
+      strength[5] = strength[5] + 1;    // rock
+      strength[12] = strength[12] + 1;  // electric
+      
+      weather[3] = weather[3] + 1;      // clear
+      break;
+    case "Rock":
+      weakness[10] = weakness[10] + 1;  // water
+      weakness[11] = weakness[11] + 1;  // grass
+      weakness[14] = weakness[14] + 1;  // ice
+      
+      strength[3] = strength[3] + 1;    // poison
+      strength[5] = strength[5] + 1;    // rock
+      strength[12] = strength[12] + 1;  // electric
+      
+      weather[3] = weather[3] + 1;      // clear
+      break;
+    case "Bug":
+      weakness[2] = weakness[2] + 1;    // flying
+      weakness[5] = weakness[5] + 1;    // rock
+      weakness[9] = weakness[9] + 1;    // fire
+      
+      strength[1] = strength[1] + 1;    // fighting
+      strength[4] = strength[4] + 1;    // ground
+      strength[11] = strength[11] + 1;  // grass
+      
+      weather[4] = weather[4] + 1;      // rain
+      break;
+    case "Ghost":
+      weakness[7] = weakness[7] + 1;    // ghost
+      weakness[15] = weakness[15] + 1;  // dark
+      
+      strength[0] = strength[0] + 1;    // normal
+      strength[1] = strength[1] + 1;    // fighting
+      strength[3] = strength[3] + 1;    // poison
+      strength[6] = strength[6] + 1;    // bug
+      
+      weather[5] = weather[5] + 1;      // fog
+      break;
+    case "Steel":
+      weakness[1] = weakness[1] + 1;    // fighting
+      weakness[9] = weakness[9] + 1;    // fire
+      weakness[4] = weakness[4] + 1;    // ground
+      
+      strength[0] = strength[0] + 1;    // normal
+      strength[2] = strength[2] + 1;    // flying
+      strength[3] = strength[3] + 1;    // poison
+      strength[5] = strength[5] + 1;    // rock
+      strength[6] = strength[6] + 1;    // bug
+      strength[8] = strength[8] + 1;    // steel
+      strength[11] = strength[11] + 1;  // grass
+      strength[13] = strength[13] + 1;  // psychic
+      strength[14] = strength[14] + 1;  // ice
+      strength[16] = strength[16] + 1;  // dragon
+      strength[17] = strength[17] + 1;  // fairy
+      
+      weather[6] = weather[6] + 1;      // snow
+      break;
+    case "Fire":
+      weakness[4] = weakness[4] + 1;    // ground
+      weakness[5] = weakness[5] + 1;    // rock
+      weakness[10] = weakness[10] + 1;  // water
+      
+      strength[6] = strength[6] + 1;    // bug
+      strength[17] = strength[17] + 1;  // fairy
+      strength[9] = strength[9] + 1;    // fire
+      strength[11] = strength[11] + 1;  // grass
+      strength[14] = strength[14] + 1;  // ice
+      strength[8] = strength[8] + 1;    // steel
+      
+      weather[3] = weather[3] + 1;      // clear
+      break;
+    case "Water":
+      weakness[11] = weakness[11] + 1;  // grass
+      weakness[12] = weakness[12] + 1;  // electric
+      
+      strength[8] = strength[8] + 1;    // steel
+      strength[9] = strength[9] + 1;    // fire
+      strength[10] = strength[10] + 1;  // water
+      strength[14] = strength[14] + 1;  // ice
+      
+      weather[4] = weather[4] + 1;      // rain
+      break;
+    case "Grass":
+      weakness[2] = weakness[2] + 1;    // flying
+      weakness[3] = weakness[3] + 1;    // poison
+      weakness[6] = weakness[6] + 1;    // bug
+      weakness[9] = weakness[9] + 1;    // fire
+      weakness[14] = weakness[14] + 1;  // ice
+      
+      strength[4] = strength[4] + 1;    // ground
+      strength[10] = strength[10] + 1;  // water
+      strength[11] = strength[11] + 1;  // grass
+      strength[12] = strength[12] + 1;  // electric
+      
+      weather[3] = weather[3] + 1;      // clear
+      break;
+    case "Electric":
+      weakness[4] = weakness[4] + 1;    // ground
+      
+      strength[2] = strength[2] + 1;    // flying
+      strength[8] = strength[8] + 1;    // steel
+      strength[12] = strength[12] + 1;  // electric
+      
+      weather[4] = weather[4] + 1;      // rain
+      break;
+    case "Psychic":
+      weakness[6] = weakness[6] + 1;    // bug
+      weakness[7] = weakness[7] + 1;    // ghost
+      weakness[15] = weakness[15] + 1;  // dark
+      
+      strength[1] = strength[1] + 1;    // fighting
+      strength[13] = strength[13] + 1;  // psychic
+      
+      weather[2] = weather[2] + 1;      // windy
+      break;
+    case "Ice":
+      weakness[1] = weakness[1] + 1;    // fighting
+      weakness[5] = weakness[5] + 1;    // rock
+      weakness[8] = weakness[8] + 1;    // steel
+      weakness[9] = weakness[9] + 1;    // fire
+      
+      strength[14] = strength[14] + 1;  // ice
+      
+      weather[6] = weather[6] + 1;      // snow
+      break;
+    case "Dark":
+      weakness[6] = weakness[6] + 1;    // bug
+      weakness[1] = weakness[1] + 1;    // fighting
+      weakness[17] = weakness[17] + 1;  // fairy
+      
+      strength[15] = strength[15] + 1;  // dark
+      strength[7] = strength[7] + 1;    // ghost
+      strength[13] = strength[13] + 1;  // psychic
+      
+      weather[5] = weather[5] + 1;      // fog
+      break;
+    case "Dragon":
+      weakness[16] = weakness[16] + 1;  // dragon
+      weakness[14] = weakness[14] + 1;  // ice
+      weakness[17] = weakness[17] + 1;  // fairy
+      
+      strength[12] = strength[12] + 1;  // electric
+      strength[9] = strength[9] + 1;    // fire
+      strength[11] = strength[11] + 1;  // grass
+      strength[10] = strength[10] + 1;  // water
+      
+      weather[2] = weather[2] + 1;      // windy
+      break;
+    case "Fairy":
+      weakness[3] = weakness[3] + 1;    // poison
+      weakness[8] = weakness[8] + 1;    // steel
+      
+      strength[6] = strength[6] + 1;    // bug
+      strength[15] = strength[15] + 1;  // dark
+      strength[1] = strength[1] + 1;    // fighting
+      strength[16] = strength[16] + 1;  // dragon
+      
+      weather[1] = weather[1] + 1;      // cloudy
+      break;
+  }
+}
+
 function showPokemon(text) {
-  var sheet = SpreadsheetApp.openById("1RWf2aNQaxcKXN3jFMptGbTxG0kr6_RtfAulHqLrckoc");
+  var sheet  = SpreadsheetApp.openById(infoSheetId);
   var data = sheet.getDataRange().getValues();
   var responsecount = 0;
 
@@ -87,6 +301,7 @@ function showPokemon(text) {
     if (pokemonname.indexOf(query) >= 0) {
       responsecount = responsecount + 1;
       
+      // work out the expected CPs for raids
       var atk = data[i][4];
       var def = data[i][5];
       var sta = data[i][3];
@@ -97,206 +312,70 @@ function showPokemon(text) {
       var lvl25cp = ((atk+15.0)*Math.pow(def+15.0,0.5)*Math.pow(sta+15.0,0.5)*Math.pow(lvl25mult,2)/10);
       var lvl20nun = ((atk+10.0)*Math.pow(def+10.0,0.5)*Math.pow(sta+10.0,0.5)*Math.pow(lvl20mult,2)/10);
       var lvl25nun = ((atk+10.0)*Math.pow(def+10.0,0.5)*Math.pow(sta+10.0,0.5)*Math.pow(lvl25mult,2)/10);
-      
+
+      // get the types, and capitalize them
       var type1 = data[i][6];
+      type1 = type1.charAt(0).toUpperCase() + type1.slice(1);
       var type2 = data[i][7];
+      type2 = type2.charAt(0).toUpperCase() + type2.slice(1);
       
-      var weakto = "";
-      var strongagainst = "";
-      var weatherboost = "";
-      switch (type1) {
-        case "normal":
-          weakto = weakto + "fighting";
-          strongagainst = strongagainst + "ghost";
-          weatherboost = weatherboost + "partly cloudy";
-          break;
-        case "fighting":
-          weakto = weakto + "fairy, flying, psychic";
-          strongagainst = strongagainst + "bug, dark, rock";
-          weatherboost = weatherboost + "cloudy";
-          break;
-        case "flying":
-          weakto = weakto + "electric, ice, rock";
-          strongagainst = strongagainst + "bug, fighting, grass, ground";
-          weatherboost = weatherboost + "windy";
-          break;
-        case "poison":
-          weakto = weakto + "ground, psychic";
-          strongagainst = strongagainst + "bug, fairy, fighting, grass, poison";
-          weatherboost = weatherboost + "cloudy";
-          break;
-        case "ground":
-          weakto = weakto + "grass, ice, water";
-          strongagainst = strongagainst + "poison, rock, electric";
-          weatherboost = weatherboost + "clear";
-          break;
-        case "rock":
-          weakto = weakto + "fighting, grass, ground, steel, water";
-          strongagainst = strongagainst + "fire, flying, normal, poison";
-          weatherboost = weatherboost + "partly cloudy";
-          break;
-        case "bug":
-          weakto = weakto + "fire, flying, rock";
-          strongagainst = strongagainst + "fighting, grass, ground";
-          weatherboost = weatherboost + "rain";
-          break;
-        case "ghost":
-          weakto = weakto + "ghost, dark";
-          strongagainst = strongagainst + "bug, poison, normal, fighting";
-          weatherboost = weatherboost + "fog";
-          break;
-        case "steel":
-          weakto = weakto + "fighting, fire, ground";
-          strongagainst = strongagainst + "bug, dragon, fairy, flying, grass, ice, normal, psychic, rock, steel, poison";
-          weatherboost = weatherboost + "snow";
-          break;
-        case "fire":
-          weakto = weakto + "ground, rock, water";
-          strongagainst = strongagainst + "bug, fairy, fire, grass, ice, steel";
-          weatherboost = weatherboost + "clear";
-          break;
-        case "water":
-          weakto = weakto + "electric, grass";
-          strongagainst = strongagainst + "fire, ice, steel, water";
-          weatherboost = weatherboost + "rain";
-          break;
-        case "grass":
-          weakto = weakto + "bug, fire, flying, ice, poison";
-          strongagainst = strongagainst + "electric, grass, ground, water";
-          weatherboost = weatherboost + "clear";
-          break;
-        case "electric":
-          weakto = weakto + "ground";
-          strongagainst = strongagainst + "electric, flying, steel";
-          weatherboost = weatherboost + "rain";
-          break;
-        case "psychic":
-          weakto = weakto + "bug, dark, ghost";
-          strongagainst = strongagainst + "fighting, psychic";
-          weatherboost = weatherboost + "windy";
-          break;
-        case "ice":
-          weakto = weakto + "fighting, fire, rock, steel";
-          strongagainst = strongagainst + "ice";
-          weatherboost = weatherboost + "snow";
-          break;
-        case "dark":
-          weakto = weakto + "bug, fighting, fairy";
-          strongagainst = strongagainst + "dark, ghost, psychic";
-          weatherboost = weatherboost + "fog";
-          break;
-        case "dragon":
-          weakto = weakto + "dragon, ice, fairy";
-          strongagainst = strongagainst + "electric, fire, grass, water";
-          weatherboost = weatherboost + "windy";
-          break;
-        case "fairy":
-          weakto = weakto + "poison, steel";
-          strongagainst = strongagainst + "bug, dark, fighting, dragon";
-          weatherboost = weatherboost + "cloudy";
-          break;
-      }
+      var weakness = [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0];
+      var strength = [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0];
+      var weather = [0,0,0,0,0,0,0,0,0,0];
+            
+      // get the type data for the first type
+      getTypeData(type1, weakness, strength, weather);
+      // if there's a second type, get the type data for that type
       if (type2.length > 0) {
-        weakto = weakto + ", ";
-        strongagainst = strongagainst + ", ";
-        weatherboost = weatherboost + ", ";
-        switch (type2) {
-        case "normal":
-          weakto = weakto + "fighting";
-          strongagainst = strongagainst + "ghost";
-          weatherboost = weatherboost + "partly cloudy";
-          break;
-        case "fighting":
-          weakto = weakto + "fairy, flying, psychic";
-          strongagainst = strongagainst + "bug, dark, rock";
-          weatherboost = weatherboost + "cloudy";
-          break;
-        case "flying":
-          weakto = weakto + "electric, ice, rock";
-          strongagainst = strongagainst + "bug, fighting, grass, ground";
-          weatherboost = weatherboost + "windy";
-          break;
-        case "poison":
-          weakto = weakto + "ground, psychic";
-          strongagainst = strongagainst + "bug, fairy, fighting, grass, poison";
-          weatherboost = weatherboost + "cloudy";
-          break;
-        case "ground":
-          weakto = weakto + "grass, ice, water";
-          strongagainst = strongagainst + "poison, rock, electric";
-          weatherboost = weatherboost + "clear";
-          break;
-        case "rock":
-          weakto = weakto + "fighting, grass, ground, steel, water";
-          strongagainst = strongagainst + "fire, flying, normal, poison";
-          weatherboost = weatherboost + "partly cloudy";
-          break;
-        case "bug":
-          weakto = weakto + "fire, flying, rock";
-          strongagainst = strongagainst + "fighting, grass, ground";
-          weatherboost = weatherboost + "rain";
-          break;
-        case "ghost":
-          weakto = weakto + "ghost, dark";
-          strongagainst = strongagainst + "bug, poison, normal, fighting";
-          weatherboost = weatherboost + "fog";
-          break;
-        case "steel":
-          weakto = weakto + "fighting, fire, ground";
-          strongagainst = strongagainst + "bug, dragon, fairy, flying, grass, ice, normal, psychic, rock, steel, poison";
-          weatherboost = weatherboost + "snow";
-          break;
-        case "fire":
-          weakto = weakto + "ground, rock, water";
-          strongagainst = strongagainst + "bug, fairy, fire, grass, ice, steel";
-          weatherboost = weatherboost + "clear";
-          break;
-        case "water":
-          weakto = weakto + "electric, grass";
-          strongagainst = strongagainst + "fire, ice, steel water";
-          weatherboost = weatherboost + "rain";
-          break;
-        case "grass":
-          weakto = weakto + "bug, fire, flying, ice, poison";
-          strongagainst = strongagainst + "electric, grass, ground, water";
-          weatherboost = weatherboost + "clear";
-          break;
-        case "electric":
-          weakto = weakto + "ground";
-          strongagainst = strongagainst + "electric, flying, steel";
-          weatherboost = weatherboost + "rain";
-          break;
-        case "psychic":
-          weakto = weakto + "bug, dark, ghost";
-          strongagainst = strongagainst + "fighting, psychic";
-          weatherboost = weatherboost + "windy";
-          break;
-        case "ice":
-          weakto = weakto + "fighting, fire, rock, steel";
-          strongagainst = strongagainst + "ice";
-          weatherboost = weatherboost + "snow";
-          break;
-        case "dark":
-          weakto = weakto + "bug, fighting, fairy";
-          strongagainst = strongagainst + "dark, ghost, psychic";
-          weatherboost = weatherboost + "fog";
-          break;
-        case "dragon":
-          weakto = weakto + "dragon, ice, fairy";
-          strongagainst = strongagainst + "electric, fire, grass, water";
-          weatherboost = weatherboost + "windy";
-          break;
-        case "fairy":
-          weakto = weakto + "poison, steel";
-          strongagainst = strongagainst + "bug, dark, fighting, dragon";
-          weatherboost = weatherboost + "cloudy";
-          break;
+        getTypeData(type2, weakness, strength, weather);
+      }
+      
+      var typeNames = ["Normal", "Fighting", "Flying", "Poison", "Ground", "Rock", "Bug", "Ghost", "Steel", "Fire", "Water", "Grass", "Electric", "Psychic", "Ice", "Dark", "Dragon", "Fairy"];
+      var weatherNames = ["Partly Cloudy", "Cloudy", "Windy", "Clear", "Rain", "Fog", "Snow"];
+      
+      // search for weaknesses
+      var weakList = "";
+      for (var w=0; w<18; w++) {
+        if (weakness[w] == 2) {
+          if (weakList.length > 0) {
+            weakList = weakList + ", ";
+          }
+          weakList = weakList + typeNames[w] + "(x2)";
+        }
+        if (weakness[w] == 1) {
+          if (weakList.length > 0) {
+            weakList = weakList + ", ";
+          }
+          weakList = weakList + typeNames[w];
+        }
+      }
+
+      // search for strengths
+      var strongList = "";
+      for (var s=0; s<18; s++) {
+        if (strength[s] == 2) {
+          if (strongList.length > 0) {
+            strongList = strongList + ", ";
+          }
+          strongList = strongList + typeNames[s] + "(x2)";
+        }
+        if (strength[s] == 1) {
+          if (strongList.length > 0) {
+            strongList = strongList + ", ";
+          }
+          strongList = strongList + typeNames[s];
         }
       }
       
-      // billylink
-      var billylink = data[i][10].toString();
+      // search for weather boost
+      var weatherBoost = "";
+      for (var wb=0; wb<7; wb++) {
+        if (weather[wb] > 0) {
+          weatherBoost = weatherNames[wb];
+        }
+      }
       
+      // compose the response message
       var texttosend = "";
       if (responsecount < 3) {
         // name
@@ -308,21 +387,25 @@ function showPokemon(text) {
         }
         texttosend = texttosend + "\\n";
         // weak to
-        texttosend = texttosend + "Attack With: " + weakto + "\\n";
+        if (weakList.length > 0) {
+          texttosend = texttosend + "Weak to: " + weakList + "\\n";
+        }
         // strong against
-        texttosend = texttosend + "Avoid Using: " + strongagainst + "\\n";
+        if (strongList.length > 0) {
+          texttosend = texttosend + "Strong against: " + strongList + "\\n";
+        }
         // weather boost
-        texttosend = texttosend + "Weather Boost: " + weatherboost + "\\n";
+        texttosend = texttosend + "Weather Boost: " + weatherBoost + "\\n";
         // raid cps
-        texttosend = texttosend + "Max IV Raid CP (normal): " + Math.floor(lvl20cp).toString() + "   (boosted): " + Math.floor(lvl25cp).toString() + "\\n";
+        texttosend = texttosend + "100 IV Raid CP (normal): " + Math.floor(lvl20cp).toString() + "   (boosted): " + Math.floor(lvl25cp).toString() + "\\n";
         texttosend = texttosend + "Min IV Raid CP (normal): " + Math.floor(lvl20nun).toString() + "   (boosted): " + Math.floor(lvl25nun).toString() + "\\n";
         // link
         texttosend = texttosend + "https://db.pokemongohub.net/pokemon/" + data[i][0];
-        // billy link
-        if (billylink.length > 0) {
-          texttosend = texttosend + "\\n" + billylink;
+        // video link
+        var vidlink = data[i][10].toString();
+        if (vidlink.length > 0) {
+          texttosend = texttosend + "\\n" + vidlink;
         }
-
         sendText(texttosend);
       }
       
