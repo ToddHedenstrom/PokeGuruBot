@@ -1,0 +1,97 @@
+
+Groupme Pokemon Bot Instructions
+-----------------------------------
+
+Each Groupme channel must have it's own independent bot code.  This bot code runs under Google Scripts as a web app.  Basically the Groupme site is told to send all messages to a web address- this feeds the message to the script code, which will respond to it if it contains command words.
+
+1.  Set up the spreadsheet for Pokemon Data.
+
+	a. Go to the web page https://sheets.google.com.  Be logged in with your Google account.
+	b. Click the '+' symbol to start a new spreadsheet.
+	c. Click 'Untitled Spreadsheet', change it to something useful like 'Pokemon Stats'.
+	d. Click 'File', then 'Import..'.  Click 'Upload', then drop the Pokemon Stats.csv file in the box.
+	e. Select 'Replace Spreadsheet', 'Detect automatically', and 'Yes'.
+	f. Click 'Import Data'.
+	g. In the address bar, find the long string of numbers and characters following 'script.google.com/d/' up to but not including the next '/' symbol.  This is
+           the spreadsheet ID, which we will need to enter in the bot code.  Either copy it to a text document, or leave this window open so you can find it as needed.
+
+
+2.  Set up the spreadsheet for Location Data.
+
+	a. In a new tab, go to the web page https://sheets.google.com.  Be logged in with your Google account.
+	b. Click the '+' symbol to start a new spreadsheet.
+	c. Click 'Untitled Spreadsheet', change it to something useful like 'Pokemon Gym Locations'.
+	d. Click 'File', then 'Import..'.  Click 'Upload', then drop the Pokemon Gym Locations.csv file in the box.
+	e. Select 'Replace Spreadsheet', 'Detect automatically', and 'Yes'.
+	f. Click 'Import Data'.
+	g. The file provided is an example, it contains data for Smyrna, Georgia.  The columns contain the data for each gym, which must be entered for your
+           area.  Columns are as follows:
+		A - official name of the gym from the gym card.
+		B - nicknames of the gym that locals might use.  Multiple nicknames can be separated by commas.
+		C - Address of the gym or parking area nearby from Google Maps.
+		D - Latitude and longitude of the gym (can be gotten from Google Maps).
+		E - Contains the word 'yes' if the gym is an EX Raid Gym.
+		F - Comment field, for stuff like 'Park across the street'.
+	g. In the address bar, find the long string of numbers and characters following 'script.google.com/d/' up to but not including the next '/' symbol.  This is
+           the spreadsheet ID, which we will need to enter in the bot code.  Either copy it to a text document, or leave this window open so you can find it as needed.
+	
+
+3.  Create the bot on the Groupme site.
+
+	a. Go to the web page https://dev.groupme.com, click the 'Bots' tab near the top, then log in with your Groupme credentials.
+	b. Click the 'Create Bot' button on that page.
+	c. Under 'Choose the group this bot will live in.' select the group for the bot to watch and respond to.  Note you must belong to the group for it to appear.
+	d. Leave the direct messages checkbox unchecked.
+	e. Under 'Name' enter a friendly name (I usually use PokeGuru).
+	f. FOR NOW - leave the Callback URL blank.  We will come back and fill this in after we've got the code installed.
+	g. Under 'Avatar URL' put the web address of a small image for the bot to use as it's group icon.  I normally use the following:
+				https://i.groupme.com/300x300.jpeg.0975f2b956d34aaaaa48ebcad0308122
+	h. Click 'Submit'.
+	i. On the Bots list, find Bot you've just created, and click on it's ID.
+	j. leave this page open on your browser for the next step, as you'll need to copy data from it. 
+
+	At this time the bot is in the group, you'll see a message in the group saying you've added it.  It won't do anything yet, as it can't see the messages until we
+	get the callback URL in and some code behind it.
+
+4.  Make the bot script and get it published on Google Scripts.
+
+	a. Open a new tab on your browser.
+	b. Go to the web page https://script.google.com.  Be logged in with your Google account.
+	c. Click the '+ New script' link near the top left.  You should be given an Untitled Project with a single empty function showing in it.
+	d. Click 'Untitled Project' and name this something that will help you identify it, like 'PokeGuruBotSmyrna'.
+	e. Click anywhere in the code window, type Ctrl-a then DEL to erase the window.
+	f. Cut and Paste the bot code into the code window.  Scroll back to the very top of the code so you can see the ID numbers.
+	g. From the Groupme Developers bot page, cut and paste the Bot ID into the string to the right of 'var botId ='.  Be sure it's surrounded by quotes (" ").
+	h. From the Step 1, find the spreadsheet ID as described in that section for the Pokemon Info sheet.  Paste it into the string to the right of
+           'var infoSheetId ='.  Be sure it's surrounded by quotes (" ").
+	i. From the Step 2, find the spreadsheet ID as described in that section for the Location Info sheet.  Paste it into the string to the right of
+           'var locationSheetId ='.  Be sure it's surrounded by quotes (" ").
+	j. Click 'File', then 'Save'.
+	k. Click 'File', then 'Manage Versions'.  In the 'describe what has changed', type 'Initial Deployment' (really doesn't matter, but that's what we're doing).
+	j. Click 'Save new version'.
+	l. Click 'Publish', then 'Deploy as web app..'.
+	m. Select Project Version 1, then 'Execute the app as:' as 'Me' (along with your email address), and 'Who has access to the app:' as 'anyone, even anonymous'.
+	n. Click 'Deploy'.
+	o. Click 'Review Permissions', then select your account on the popup.  It will warn that the app isn't verified.  This isn't a huge issue so long as you trust
+	   the developer.  I have it easy, I'm the developer and I trust me.  You decide at this point, but I've nothing to gain from causing trouble.  :)
+	p. Click 'Advanced'.  Scroll down a bit to 'Go to ' followed by the name you chose for the bot, and click that.
+	q. Review the options.  It will only be able to access the spreadsheets whose IDs you entered into the code.  Click 'Allow'.
+	r. The small dialog now contains a URL titled 'Current web app URL'.  Click this, type Ctrl-A to select it, and Ctrl-C to copy it to the clipboard.
+
+5. Register the app URL in the Bot so it can hear messages.
+
+	a. Go back to the GroupMe Developers tab that should still be open.
+	b. Click the 'back' button to return to the Bots list.
+	c. To the right of the bot's row, click the 'Edit' button.
+	d. Click in the empty Callback URL box.  Type Ctrl-V to paste the address you copied at the end of Step 4.
+	e. Click 'Submit'.
+	f. All web tabs can now be closed.
+
+Your bot is now ALIVE...  test it by typing '!help' in the group.
+
+	
+
+
+
+
+
