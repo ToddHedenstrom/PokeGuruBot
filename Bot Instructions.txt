@@ -52,6 +52,8 @@ Each Groupme channel must have it's own independent bot code.  This bot code run
 
 	At this time the bot is in the group, you'll see a message in the group saying you've added it.  It won't do anything yet, as it can't see the messages until we
 	get the callback URL in and some code behind it.
+  
+  callback url -  https://script.google.com/macros/s/AKfycbxalc3aGIgeM2UpzBIPgrdtzP18lUKQRgi9IMPB3Yildxb2-8w/exec 
 
 4.  Make the bot script and get it published on Google Scripts.
 
